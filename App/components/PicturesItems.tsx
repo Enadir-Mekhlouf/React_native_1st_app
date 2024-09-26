@@ -6,7 +6,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; // Ensure t
 
 
 
-const PicturesItems = ({navigation,imageSource,name,price,description,CodeBar,id}:any) =>{
+const PicturesItems = ({navigation,imageUri,name,price,description,CodeBar,id}:any) =>{
     
     return(
         <TouchableOpacity style={{paddingHorizontal:30,paddingTop:10}}
@@ -15,11 +15,11 @@ const PicturesItems = ({navigation,imageSource,name,price,description,CodeBar,id
             name, 
             price, 
             description, 
-            imageUri: imageSource,
+            imageUri,
             CodeBar, })}
         >
             <Image 
-                source={imageSource}
+                source={{ uri: imageUri.uri }} 
                 style={{width:'100%',height:170}}
                 borderTopRightRadius={10}
                 borderTopLeftRadius={10}

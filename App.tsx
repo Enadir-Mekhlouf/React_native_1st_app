@@ -97,8 +97,18 @@ const SignUP =({navigation}: any) =>{
 const ProductDetail = ({ route ,navigation}: any) => {
   const { id,name, price,description, imageUri, CodeBar } = route.params;
   const [Modalvisible,SetModalvisible]=React.useState(false)
-  console.log(id,name)
   const dispatch = useDispatch();
+  console.log(typeof imageUri, imageUri);
+
+  // const [product, setProduct] = React.useState({
+  //   id, name, price, description, imageUri, CodeBar
+  // });
+
+ 
+  // const handleUpdate = (updatedProduct) => {
+  //   updateitem(updatedProduct); 
+  // }
+
   const toggleModalVisible = ()=> {
     SetModalvisible(!Modalvisible)
 
@@ -147,7 +157,7 @@ const ProductDetail = ({ route ,navigation}: any) => {
       </View>
 
       
-      <ProductModal visible={Modalvisible} onClose={toggleModalVisible} animationType={"slide"} mode={'edit'} item={{name, price,description,CodeBar,id}} />
+      <ProductModal visible={Modalvisible} onClose={toggleModalVisible} animationType={"slide"} mode={'edit'} item={{name, price,description,CodeBar,id, imageUri: imageUri.uri} } />
       
     </SafeAreaView>
 
@@ -158,7 +168,7 @@ const ProductDetail = ({ route ,navigation}: any) => {
 
 
 
-const ProductModal=({ visible, onClose,animationType,mode, item}: any)=>{
+const ProductModal=({visible, onClose,animationType,mode, item}: any)=>{
 
   // const [text, onChangeText] = React.useState("");
   // const [Description, onChangeDescription] = React.useState("");
@@ -170,12 +180,10 @@ const [text, setText] = React.useState(item ? item.name : '');
 const [description, setDescription] = React.useState(item ? item.description : '');
 const [price, setPrice] = React.useState(item ? item.price : '');
 const [CodeBar, setCodeBar] = React.useState(item ? item.CodeBar : '');
-const [imageUri, setImageUri] = React.useState(item ? item.imageUri : null);
+const [imageUri, setImageUri] = React.useState(item ? item.imageUri :null);
 
-  const IseditMode = mode ==='edit';
-
-  const dispatch = useDispatch();
-  
+const IseditMode = mode ==='edit';
+const dispatch = useDispatch();
   const handleSave = () => {
     const newProduct = {
       id: Date.now().toString(),
@@ -187,12 +195,13 @@ const [imageUri, setImageUri] = React.useState(item ? item.imageUri : null);
     };
 
     if (mode === 'edit') {
-      dispatch(updateitem({ id: item.id, updates: newProduct })); // Update existing product
+      dispatch(updateitem({ id: item.id, updates: newProduct })); 
+      // onSave(newProduct); 
     } else {
-      dispatch(additem(newProduct)); // Add new product
+      dispatch(additem(newProduct)); 
     }
 
-    onClose(); // Close the modal after saving
+    onClose(); 
   };
   const openGallery = () => {
     let options = {
@@ -228,8 +237,6 @@ const [imageUri, setImageUri] = React.useState(item ? item.imageUri : null);
       animationType={animationType}
       visible={visible}
       onRequestClose={onClose} 
-     
-    
     >
       <SafeAreaView style={{flex:1, justifyContent:'space-between', backgroundColor:'#ffffff',padding:20}}>
     <View>
@@ -282,7 +289,7 @@ const [imageUri, setImageUri] = React.useState(item ? item.imageUri : null);
           {/* <EvilIcons name='image' color={'black'} size={100}/>
           <Text> Add An Image</Text> */}
 
-
+            
 {imageUri ? (
           <Image
             source={{ uri: imageUri }}
@@ -294,6 +301,7 @@ const [imageUri, setImageUri] = React.useState(item ? item.imageUri : null);
             <Text>Add An Image</Text>
           </>
         )}
+        
 
         </View>
         </TouchableOpacity>
@@ -352,20 +360,7 @@ const Home=({navigation}: any)=>{
           
         </Text>
         </View>
-        
-       
         <View>
-        {/* {MyData.map((item, index) => (
-            <PicturesItems
-              key={index} 
-              navigation={navigation}
-              name={item.label} 
-              price={item.price} 
-              imageSource={picImage}
-            />
-          ))} */}
-
-
 {products.map((product) => (
         <PicturesItems
           key={product.id}
@@ -375,7 +370,7 @@ const Home=({navigation}: any)=>{
           price={product.price}
           description={product.description}
           CodeBar={product.CodeBar}
-          imageSource={{ uri: product.imageUri }} // Display selected image
+          imageUri={{ uri: product.imageUri }} 
         />
       ))}
         </View>
