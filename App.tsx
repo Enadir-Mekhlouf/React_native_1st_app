@@ -19,13 +19,6 @@ const SignUP =({navigation}: any) =>{
      <View style={{paddingTop:"10%"}}>
       <Text style={{fontSize:30,color:'#050505'}}>Create Your Account</Text>
       </View>
-    {/* <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        padding: 5,
-        
-      }}> */}
         <View style={{paddingBottom:"20%" ,alignItems:'center'}}>
         <View style={{paddingBottom:"20%"}}>
       <View>
@@ -171,7 +164,7 @@ const ProductModal=({ visible, onClose,animationType,mode, item}: any)=>{
       quality: 1,
     };
 
-    // Launch image gallery to pick an image
+    
     launchImageLibrary(options, (response) => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -179,7 +172,7 @@ const ProductModal=({ visible, onClose,animationType,mode, item}: any)=>{
         console.log('Error:', response.errorMessage);
       } else {
         const selectedImage = response.assets[0].uri;
-        setImageUri(selectedImage); // Store the image URI in state
+        setImageUri(selectedImage); 
       }
     });
   };
@@ -249,11 +242,28 @@ const ProductModal=({ visible, onClose,animationType,mode, item}: any)=>{
         />
         </View>
       </View>
+
+      
+      {/* this view is the view where i add image and "save" it */}
       <View style={{width:"100%",alignItems:'center'}}>
-        <TouchableOpacity style={{width:"100%"}} >
+        <TouchableOpacity style={{width:"100%"}} onPress={openGallery}>
         <View style={{backgroundColor:'#eeeeee',alignItems:'center',width:"100%",borderRadius:20,borderStyle:'dashed',borderColor:'gray', borderWidth:1, marginBottom:20, padding:20}}>
-          <EvilIcons name='image' color={'black'} size={100}/>
-          <Text> Add An Image</Text>
+          {/* <EvilIcons name='image' color={'black'} size={100}/>
+          <Text> Add An Image</Text> */}
+
+
+{imageUri ? (
+          <Image
+            source={{ uri: imageUri }}
+            style={{ width: "100%", height: 200, borderRadius: 10 }}
+          />
+        ) : (
+          <>
+            <EvilIcons name='image' color={'black'} size={100} />
+            <Text>Add An Image</Text>
+          </>
+        )}
+
         </View>
         </TouchableOpacity>
         <View style={styles.centeredView}>
@@ -415,14 +425,6 @@ const SignIN = ({navigation}: any) => {
   const [Password, onChangePassword] = React.useState('');
   return (
     <SafeAreaView style={{flex:1, justifyContent:'space-between', backgroundColor:'#ffffff',padding:10}}>
-    
-    {/* <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        padding: 5,
-        
-      }}> */}
         <View style={{flex:1,paddingBottom:"20%" ,alignItems:'center',justifyContent:'space-around'}}>
         <View style={{paddingTop:"10%",paddingHorizontal:10,alignSelf:'flex-start'}}>
       <Text style={{fontSize:30,color:'#050505'}}>Welcome Back !</Text>

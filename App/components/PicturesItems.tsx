@@ -6,7 +6,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; // Ensure t
 
 
 
-const PicturesItems = ({navigation,imageSource,name,price}) =>{
+const PicturesItems = ({navigation,imageSource,name,price}:any) =>{
     
     return(
         <TouchableOpacity style={{paddingHorizontal:30,paddingTop:10}}
