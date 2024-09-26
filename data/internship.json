@@ -1,0 +1,43 @@
+[
+    {
+      "id": 1,
+      "label": "Product 1",
+      "description": "This is a sample description for Product 1.",
+      "price": 100,
+      "codeBar": "1234567890"
+      
+    },
+    {
+      "id": 2,
+      "label": "Product 2",
+      "description": "This is a sample description for Product 2.",
+      "price": 200,
+      "codeBar": "0987654321"
+     
+    },
+    {
+      "id": 3,
+      "label": "Product 3",
+      "description": "This is a sample description for Product 3.",
+      "price": 300,
+      "codeBar": "1122334455"
+     
+    },
+    {
+      "id": 4,
+      "label": "Product 4",
+      "description": "This is a sample description for Product 4.",
+      "price": 400,
+      "codeBar": "5566778899"
+      
+    },
+    {
+      "id": 5,
+      "label": "Product 5",
+      "description": "This is a sample description for Product 5.",
+      "price": 500,
+      "codeBar": "9988776655"
+      
+    }
+  ]
+  
