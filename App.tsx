@@ -8,7 +8,10 @@ import EvilIcons from "react-native-vector-icons/EvilIcons";
 import PicturesItems from './App/components/PicturesItems';
 import { useRoute } from "@react-navigation/native";
 import { launchImageLibrary } from 'react-native-image-picker';
+import store from './redux/store'
 import picImage from './assets/pic.png'; 
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import { additem, removeitem, updateitem } from './redux/ItemSlice';
 
 
 const SignUP =({navigation}: any) =>{
@@ -91,19 +94,26 @@ const SignUP =({navigation}: any) =>{
 }
 
 
-const ProductDetail = ({ route }: any) => {
-  const { name, price } = route.params;
+const ProductDetail = ({ route ,navigation}: any) => {
+  const { id,name, price,description, imageUri, CodeBar } = route.params;
   const [Modalvisible,SetModalvisible]=React.useState(false)
-
+  console.log(id,name)
+  const dispatch = useDispatch();
   const toggleModalVisible = ()=> {
     SetModalvisible(!Modalvisible)
 
   }
+
+  const handleDelete = () => {
+    dispatch(removeitem(id)); 
+    navigation.goBack(); 
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, alignItems: 'center', width: "100%" }}>
       <View style={{alignItems: 'center', width: "100%" }}>
         <Image 
-          source={picImage} 
+          source={imageUri} 
           style={{ width: "100%", height: "60%"}}
         />
       </View>
@@ -111,14 +121,11 @@ const ProductDetail = ({ route }: any) => {
         
 
         <View style={{flex:1 , flexDirection:'column',paddingLeft:15, justifyContent:'space-between',paddingBottom:20}}>
-        <Text style={{ fontSize: 20 }}>Label: {name}</Text>
-        <Text style={{ fontSize: 20 }}>Price: {price} usd</Text>
-        <Text>description description description description description description description description description description description 
-          description description description description </Text>
-
-        <Text style={{ fontSize: 20 }}>Code Bar:</Text>
-
-        </View>
+          <Text style={{ fontSize: 20 }}>Label: {name}</Text>
+          <Text style={{ fontSize: 20 }}>Price: {price} usd</Text>
+          <Text>description : {description} </Text>
+          <Text style={{ fontSize: 20 }}>Code Bar: {CodeBar}</Text>
+          </View>
 
         <View style={{alignItems:'center',justifyContent:'center'}}>
         <View style={{padding: 5,width:300}}>
@@ -132,7 +139,7 @@ const ProductDetail = ({ route }: any) => {
         <View style={{padding: 5,width:300}}>
          <TouchableOpacity
           style={styles.button}
-          onPress={() => Alert.alert('Sign In button pressed')}>
+          onPress={() =>  handleDelete()}>
           <Text style={styles.buttonText}>Delete</Text>
         </TouchableOpacity>
         </View>
@@ -140,7 +147,7 @@ const ProductDetail = ({ route }: any) => {
       </View>
 
       
-      <ProductModal visible={Modalvisible} onClose={toggleModalVisible} animationType={"slide"} mode={'edit'} item={{name, price}} />
+      <ProductModal visible={Modalvisible} onClose={toggleModalVisible} animationType={"slide"} mode={'edit'} item={{name, price,description,CodeBar,id}} />
       
     </SafeAreaView>
 
@@ -153,11 +160,40 @@ const ProductDetail = ({ route }: any) => {
 
 const ProductModal=({ visible, onClose,animationType,mode, item}: any)=>{
 
-  const [text, onChangeText] = React.useState("");
-  const [Password, onChangePassword] = React.useState("");
-  const IseditMode = mode ==='edit';
-  const [imageUri, setImageUri] = React.useState(null);
+  // const [text, onChangeText] = React.useState("");
+  // const [Description, onChangeDescription] = React.useState("");
+  // const [Price, onChangePrice] = React.useState("");
+  // const [CodeBar, onChangeCodeBar] = React.useState("");
+  // const [imageUri, setImageUri] = React.useState(null);
 
+const [text, setText] = React.useState(item ? item.name : '');
+const [description, setDescription] = React.useState(item ? item.description : '');
+const [price, setPrice] = React.useState(item ? item.price : '');
+const [CodeBar, setCodeBar] = React.useState(item ? item.CodeBar : '');
+const [imageUri, setImageUri] = React.useState(item ? item.imageUri : null);
+
+  const IseditMode = mode ==='edit';
+
+  const dispatch = useDispatch();
+  
+  const handleSave = () => {
+    const newProduct = {
+      id: Date.now().toString(),
+      name: text,
+      price,
+      CodeBar,
+      description,
+      imageUri,
+    };
+
+    if (mode === 'edit') {
+      dispatch(updateitem({ id: item.id, updates: newProduct })); // Update existing product
+    } else {
+      dispatch(additem(newProduct)); // Add new product
+    }
+
+    onClose(); // Close the modal after saving
+  };
   const openGallery = () => {
     let options = {
       mediaType: 'photo',
@@ -177,13 +213,13 @@ const ProductModal=({ visible, onClose,animationType,mode, item}: any)=>{
     });
   };
 
-  console.log(item?.price);
+  
   
   useEffect(()=>{
 
     if(item){
-      onChangeText(item.name)
-      onChangePassword(item.price.toString())
+      setText(item.name)
+      setPrice(item.price.toString())
     }
   }, [item])
   
@@ -199,18 +235,13 @@ const ProductModal=({ visible, onClose,animationType,mode, item}: any)=>{
     <View>
       <Text style={{fontSize:30,color:'#050505'}}>{IseditMode?'Product Label':'Create Product'}</Text>
     </View>
-
-
-  
-
-
       <View style={{alignItems:'center'}}>
         <View>
           <Text style={{color:'#050505'}}>Label</Text>
           <TextInput
           placeholder='Label'
             style={styles.input}
-            onChangeText={onChangeText}
+            onChangeText={setText}
             value={text}
           />
         </View>
@@ -219,8 +250,8 @@ const ProductModal=({ visible, onClose,animationType,mode, item}: any)=>{
         <TextInput
         placeholder='Description'
           style={styles.input}
-          onChangeText={onChangePassword}
-          value={Password}
+          onChangeText={setDescription}
+          value={description}
         />
         </View>
         <View>
@@ -228,8 +259,8 @@ const ProductModal=({ visible, onClose,animationType,mode, item}: any)=>{
         <TextInput
         placeholder='Price'
           style={styles.input}
-          onChangeText={onChangePassword}
-          value={Password}
+          onChangeText={setPrice}
+          value={price}
         />
         </View>
         <View >
@@ -237,8 +268,8 @@ const ProductModal=({ visible, onClose,animationType,mode, item}: any)=>{
         <TextInput
         placeholder='Code bar'
           style={styles.input}
-          onChangeText={onChangePassword}
-          value={Password}
+          onChangeText={setCodeBar}
+          value={CodeBar}
         />
         </View>
       </View>
@@ -272,9 +303,10 @@ const ProductModal=({ visible, onClose,animationType,mode, item}: any)=>{
             style={styles.buttonStart}
             onPress={() => {
               Alert.alert('Product saved!');
+              handleSave();
               onClose();
             }}>
-            <Text style={styles.buttonTextStart}>Save</Text>
+            <Text style={styles.buttonTextStart}>{mode === 'edit' ? 'Save Changes' : 'Create Product'}</Text>
           </TouchableOpacity>
           </View>
         </View>
@@ -299,11 +331,18 @@ const Home=({navigation}: any)=>{
   const MyData = require('./data/internship.json');
   
   const shomedata=()=>{
-    console.log(MyData.length)
+   
   }
   useEffect(() => {
     shomedata()
   }, []);
+
+  const products = useSelector((state) => state.items.items); // Access the products array from Redux store
+
+
+
+
+
   return(
 
     <SafeAreaView style={{flex:1,padding:1,backgroundColor:'white'}}>
@@ -316,7 +355,7 @@ const Home=({navigation}: any)=>{
         
        
         <View>
-        {MyData.map((item, index) => (
+        {/* {MyData.map((item, index) => (
             <PicturesItems
               key={index} 
               navigation={navigation}
@@ -324,7 +363,21 @@ const Home=({navigation}: any)=>{
               price={item.price} 
               imageSource={picImage}
             />
-          ))}
+          ))} */}
+
+
+{products.map((product) => (
+        <PicturesItems
+          key={product.id}
+          navigation={navigation}
+          id={product.id}
+          name={product.name}
+          price={product.price}
+          description={product.description}
+          CodeBar={product.CodeBar}
+          imageSource={{ uri: product.imageUri }} // Display selected image
+        />
+      ))}
         </View>
         
       </ScrollView>
@@ -531,6 +584,7 @@ buttonStart: {
 
 const App = ({})=> {
   return (
+    <Provider store={store}>
     <NavigationContainer>
     <Stack.Navigator initialRouteName="SignIn" screenOptions={{headerShown: false}}>
       <Stack.Screen name="SignIn" component={SignIN} />
@@ -541,8 +595,17 @@ const App = ({})=> {
 
     </Stack.Navigator>
   </NavigationContainer>
+  </Provider>
   )
 }
 
 export default App
+
+// function dispatch(arg0: any) {
+//   throw new Error('Function not implemented.');
+// }
+
+// function removeProduct(id: any): any {
+//   throw new Error('Function not implemented.');
+// }
 
