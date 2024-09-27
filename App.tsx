@@ -19,19 +19,21 @@ const SignUP =({navigation}: any) =>{
   const [Password, onChangePassword] = React.useState('');
   return (
     <SafeAreaView style={{flex:1, justifyContent:'space-between', backgroundColor:'#ffffff',padding:10}}>
-     <View style={{paddingTop:"10%"}}>
-      <Text style={{fontSize:30,color:'#050505'}}>Create Your Account</Text>
+      <View style={{flex:1,paddingBottom:"20%" ,alignItems:'center',justifyContent:'space-around'}}>
+      
+      <View >
+        <View style={{alignSelf:'flex-start',paddingBottom:"20%"}}>
+        <Text style={{fontSize:30,color:'#050505'}}>Create Your Account</Text>
       </View>
-        <View style={{paddingBottom:"20%" ,alignItems:'center'}}>
         <View style={{paddingBottom:"20%"}}>
-      <View>
-        <Text style={{color:'#050505'}}>Username</Text>
-        <TextInput
-          placeholder='Username'
-          style={styles.input}
-          onChangeText={onChangeText}
-          value={text}
-        />
+          <View>
+            <Text style={{color:'#050505'}}>Username</Text>
+            <TextInput
+              placeholder='Username'
+              style={styles.input}
+              onChangeText={onChangeText}
+              value={text}
+            />
       </View>
       <View>
       <Text style={{color:'#050505'}}>Email</Text>
@@ -88,6 +90,7 @@ const SignUP =({navigation}: any) =>{
       </View>
 
     </View>
+    </View>
     </SafeAreaView>
 
   );
@@ -100,15 +103,7 @@ const ProductDetail = ({ route ,navigation}: any) => {
   const dispatch = useDispatch();
   console.log(typeof imageUri, imageUri);
 
-  // const [product, setProduct] = React.useState({
-  //   id, name, price, description, imageUri, CodeBar
-  // });
-
  
-  // const handleUpdate = (updatedProduct) => {
-  //   updateitem(updatedProduct); 
-  // }
-
   const toggleModalVisible = ()=> {
     SetModalvisible(!Modalvisible)
 
@@ -170,12 +165,6 @@ const ProductDetail = ({ route ,navigation}: any) => {
 
 const ProductModal=({visible, onClose,animationType,mode, item}: any)=>{
 
-  // const [text, onChangeText] = React.useState("");
-  // const [Description, onChangeDescription] = React.useState("");
-  // const [Price, onChangePrice] = React.useState("");
-  // const [CodeBar, onChangeCodeBar] = React.useState("");
-  // const [imageUri, setImageUri] = React.useState(null);
-
 const [text, setText] = React.useState(item ? item.name : '');
 const [description, setDescription] = React.useState(item ? item.description : '');
 const [price, setPrice] = React.useState(item ? item.price : '');
@@ -221,9 +210,6 @@ const dispatch = useDispatch();
       }
     });
   };
-
-  
-  
   useEffect(()=>{
 
     if(item){
@@ -238,11 +224,13 @@ const dispatch = useDispatch();
       visible={visible}
       onRequestClose={onClose} 
     >
-      <SafeAreaView style={{flex:1, justifyContent:'space-between', backgroundColor:'#ffffff',padding:20}}>
-    <View>
+    <SafeAreaView style={{flex:1, justifyContent:'space-between', backgroundColor:'#ffffff',padding:20}}>
+      <View style={{flex:1,alignItems:'center',justifyContent:'space-around'}}>
+    
+      <View style={{alignItems:'center'}}>
+        <View style={{alignSelf:'flex-start',paddingBottom:"20%"}}>
       <Text style={{fontSize:30,color:'#050505'}}>{IseditMode?'Product Label':'Create Product'}</Text>
     </View>
-      <View style={{alignItems:'center'}}>
         <View>
           <Text style={{color:'#050505'}}>Label</Text>
           <TextInput
@@ -318,6 +306,7 @@ const dispatch = useDispatch();
           </TouchableOpacity>
           </View>
         </View>
+      </View>
       </View>
       </SafeAreaView>
     </Modal>
@@ -473,13 +462,12 @@ const SignIN = ({navigation}: any) => {
   const [Password, onChangePassword] = React.useState('');
   return (
     <SafeAreaView style={{flex:1, justifyContent:'space-between', backgroundColor:'#ffffff',padding:10}}>
-        <View style={{flex:1,paddingBottom:"20%" ,alignItems:'center',justifyContent:'space-around'}}>
-        <View style={{paddingTop:"10%",paddingHorizontal:10,alignSelf:'flex-start'}}>
-      <Text style={{fontSize:30,color:'#050505'}}>Welcome Back !</Text>
-      </View>
+      <View style={{flex:1,paddingBottom:"20%" ,alignItems:'center',justifyContent:'space-around'}}>
       <View>
-      <View >
-        {/* <MaterialIcons name='restore-from-trash' color={"black"} /> */}
+        <View style={{alignSelf:'flex-start',paddingBottom:"20%"}}>
+          <Text style={{fontSize:30,color:'#050505'}}>Welcome Back !</Text>
+        </View>
+      <View>
         <Text style={{color:'#050505'}}>Username</Text>
         <TextInput          
           placeholder='Username'
