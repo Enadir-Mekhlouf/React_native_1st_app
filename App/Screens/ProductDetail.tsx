@@ -13,88 +13,68 @@ import { Provider, useDispatch, useSelector } from 'react-redux';
 import { additem, removeitem, updateitem } from '../../redux/ItemSlice';
 import ProductModal from './ProductModal'
 
-
-const SignUP =({navigation}: any) =>{
-    const [text, onChangeText] = React.useState('');
-    const [Password, onChangePassword] = React.useState('');
-    return (
-      <SafeAreaView style={{flex:1, justifyContent:'space-between', backgroundColor:'#ffffff',padding:10}}>
-        <View style={{flex:1,paddingBottom:"20%" ,alignItems:'center',justifyContent:'space-around'}}>
-        
-        <View >
-          <View style={{alignSelf:'flex-start',paddingBottom:"20%"}}>
-          <Text style={{fontSize:30,color:'#050505'}}>Create Your Account</Text>
-        </View>
-          <View style={{paddingBottom:"20%"}}>
-            <View>
-              <Text style={{color:'#050505'}}>Username</Text>
-              <TextInput
-                placeholder='Username'
-                style={styles.input}
-                onChangeText={onChangeText}
-                value={text}
-              />
-        </View>
-        <View>
-        <Text style={{color:'#050505'}}>Email</Text>
-        <TextInput
-        placeholder='...@gmail.com'
-          style={styles.input}
-          onChangeText={onChangePassword}
-          secureTextEntry={true}
-          value={Password}
-        />
-        </View>
-        <View>
-        <Text style={{color:'#050505'}}>Password</Text>
-        <TextInput
-        placeholder='Password'
-          style={styles.input}
-          onChangeText={onChangePassword}
-          secureTextEntry={true}
-          value={Password}
-        />
-      </View>
-      <View>
-        <Text style={{color:'#050505'}}>Confirm Password</Text>
-        <TextInput
-          placeholder='Password'
-          style={styles.input}
-          onChangeText={onChangePassword}
-          secureTextEntry={true}
-          value={Password}
-        />
-        </View>
-        </View>
+const ProductDetail = ({ route ,navigation}: any) => {
+    const { id,name, price,description, imageUri, CodeBar } = route.params;
+    const [Modalvisible,SetModalvisible]=React.useState(false)
+    const dispatch = useDispatch();
+    console.log(typeof imageUri, imageUri);
   
-        <View style={styles.centeredView}>
+   
+    const toggleModalVisible = ()=> {
+      SetModalvisible(!Modalvisible)
+  
+    }
+  
+    const handleDelete = () => {
+      dispatch(removeitem(id)); 
+      navigation.goBack(); 
+    };
+  
+    return (
+      <SafeAreaView style={{ flex: 1, alignItems: 'center', width: "100%" }}>
+        <View style={{alignItems: 'center', width: "100%" }}>
+          <Image 
+            source={imageUri} 
+            style={{ width: "100%", height: "60%"}}
+          />
+        </View>
+        <View style={{ backgroundColor: "#ffffff", width: "100%", height:"65%", position:'absolute', zIndex:1 ,top:"35%", borderTopLeftRadius:20, borderTopRightRadius:20,justifyContent:'space-between'}}>
+          
+  
+          <View style={{flex:1 , flexDirection:'column',paddingLeft:15, justifyContent:'space-between',paddingBottom:20}}>
+            <Text style={{ fontSize: 20 }}>Label: {name}</Text>
+            <Text style={{ fontSize: 20 }}>Price: {price} usd</Text>
+            <Text>description : {description} </Text>
+            <Text style={{ fontSize: 20 }}>Code Bar: {CodeBar}</Text>
+            </View>
+  
+          <View style={{alignItems:'center',justifyContent:'center'}}>
           <View style={{padding: 5,width:300}}>
           <TouchableOpacity
             style={styles.buttonStart}
-            onPress={() => navigation.navigate('Home')}>
-            <Text style={styles.buttonTextStart}>Start</Text>
+            onPress={toggleModalVisible}
+            >
+            <Text style={styles.buttonTextStart}>Edit</Text>
           </TouchableOpacity>
           </View>
-  
           <View style={{padding: 5,width:300}}>
            <TouchableOpacity
             style={styles.button}
-            onPress={() => Alert.alert('Sign In button pressed')}>
-            <Text style={styles.buttonText}>Sign Up</Text>
+            onPress={() =>  handleDelete()}>
+            <Text style={styles.buttonText}>Delete</Text>
           </TouchableOpacity>
-  
-  
           </View>
-  
-  
+        </View>
         </View>
   
-      </View>
-      </View>
+        
+        <ProductModal visible={Modalvisible} onClose={toggleModalVisible} animationType={"slide"} mode={'edit'} item={{name, price,description,CodeBar,id, imageUri: imageUri.uri} } />
+        
       </SafeAreaView>
   
     );
-  }
+  };
+
 
   const styles = StyleSheet.create({
     input: {
@@ -144,4 +124,6 @@ const SignUP =({navigation}: any) =>{
   
   });
 
-  export default SignUP
+
+  export default ProductDetail 
+  
