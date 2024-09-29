@@ -27,6 +27,11 @@ import CustomButton from '../components/Button';
 const ProductDetail = ({route, navigation}: any) => {
   const {id, name, imageUri, CodeBar, price, description} = route.params;
 
+  const product = useSelector(
+    (state: any) => state.items.items.filter(i => i.id == id)[0],
+  );
+  console.log(product);
+
   // const {name, imageUri, CodeBar, price, description} = useSelector(
   //   (state: any) => state.items.items.filter(i => i.id == id)[0],
   // );
@@ -46,7 +51,10 @@ const ProductDetail = ({route, navigation}: any) => {
   return (
     <SafeAreaView style={{flex: 1, alignItems: 'center', width: '100%'}}>
       <View style={{alignItems: 'center', width: '100%'}}>
-        <Image source={imageUri} style={{width: '100%', height: '60%'}} />
+        <Image
+          source={{uri: product.imageUri}}
+          style={{width: '100%', height: '60%'}}
+        />
       </View>
       <View
         style={{
@@ -69,14 +77,16 @@ const ProductDetail = ({route, navigation}: any) => {
             padding: 30,
           }}>
           <Text style={{fontSize: 25, color: '#050505', paddingBottom: 20}}>
-            Label {name}
+            Label {product.name}
           </Text>
           <Text style={{fontSize: 20, color: '#050505', paddingBottom: 20}}>
-            Price {price}{' '}
+            Price {product.price}{' '}
           </Text>
-          <Text style={{paddingBottom: 20}}>description :{description} </Text>
+          <Text style={{paddingBottom: 20}}>
+            description :{product.description}{' '}
+          </Text>
           <Text style={{fontSize: 20, color: '#050505'}}>
-            Code Bar {CodeBar}
+            Code Bar {product.CodeBar}
           </Text>
         </View>
 
@@ -108,7 +118,14 @@ const ProductDetail = ({route, navigation}: any) => {
         onClose={toggleModalVisible}
         animationType={'slide'}
         mode={'edit'}
-        item={{name, price, description, CodeBar, id, imageUri: imageUri.uri}}
+        item={{
+          name: product.name,
+          price: product.price,
+          description: product.description,
+          CodeBar: product.CodeBar,
+          id,
+          imageUri: product.imageUri,
+        }}
       />
     </SafeAreaView>
   );

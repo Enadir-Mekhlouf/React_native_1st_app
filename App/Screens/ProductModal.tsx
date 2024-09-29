@@ -31,7 +31,6 @@ const ProductModal = ({visible, onClose, animationType, mode, item}: any) => {
   const dispatch = useDispatch();
   const handleSave = () => {
     const newProduct = {
-      id: Date.now().toString(),
       name: text,
       price,
       CodeBar,
@@ -43,9 +42,13 @@ const ProductModal = ({visible, onClose, animationType, mode, item}: any) => {
       dispatch(updateitem({id: item.id, updates: newProduct}));
       // onSave(newProduct);
     } else {
-      dispatch(additem(newProduct));
+      dispatch(additem({...newProduct, id: Date.now().toString()}));
     }
-
+    setText('');
+    setDescription('');
+    setPrice('');
+    setCodeBar('');
+    setImageUri(null);
     onClose();
   };
   const openGallery = () => {
