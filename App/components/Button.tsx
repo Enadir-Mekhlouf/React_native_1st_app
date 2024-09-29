@@ -1,60 +1,47 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 
-const CustomButton = ({ title, onPress, backgroundColor = '#007bff', color = '#fff' }:any) => {
+const CustomButton = ({title, onPress, theme}) => {
+  const themes = {
+    primary: {
+      backgroundColor: '#444444',
+      color: 'white',
+    },
+    secondary: {
+      backgroundColor: 'white',
+      color: 'black',
+      borderColor: 'black',
+      borderWidth: 1,
+    },
+  };
+
+  // Determine the selected theme, default to primary if not provided
+  const selectedTheme = themes[theme] || themes.primary;
+
   return (
-    <TouchableOpacity style={[styles.button, { backgroundColor }]} onPress={onPress}>
-      <Text style={[styles.text, { color }]}>{title}</Text>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[
+        styles.button,
+        {backgroundColor: selectedTheme.backgroundColor},
+        theme === 'secondary' && styles.secondaryButton,
+      ]}>
+      <Text style={{color: selectedTheme.color, fontSize: 16}}>{title}</Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-    input: {
-      height: 40,
-      width: 320,
-      marginBottom:10,
-      marginTop:10,
-      padding: 10,
-      borderRadius: 10,
-      backgroundColor: '#eeeeee',
-    },
-    centeredView: {
-      justifyContent: 'center',
-      alignItems: 'center',
-  
-    },
-  
-  
-  buttonStart: {
-      backgroundColor: '#444444',
-      paddingVertical: 10,
-      paddingHorizontal: 20,
-      borderRadius: 10,
-      alignItems: 'center',
-      
-    },
-    buttonTextStart: {
-      color: 'white',
-      fontSize: 16,
-    },
-  
-  
-    button: {
-      backgroundColor: 'white',
-      paddingVertical: 10,
-      paddingHorizontal: 20,
-      borderRadius: 10,
-      alignItems: 'center',
-      borderColor:'black',
-      borderWidth:1
-    },
-    buttonText: {
-      color: 'black',
-      fontSize: 16,
-    },
-  
-  
-  });
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  secondaryButton: {
+    borderColor: 'black',
+    borderWidth: 1,
+  },
+});
 
 export default CustomButton;

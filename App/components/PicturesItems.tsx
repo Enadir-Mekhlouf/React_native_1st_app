@@ -27,7 +27,7 @@ const PicturesItems = ({navigation,imageUri,name,price,description,CodeBar,id}:a
             />
             <View style={{flex:1,flexDirection:'row',justifyContent:'space-between',borderBottomRightRadius:10,borderBottomLeftRadius:10,backgroundColor:'#eeeeee',padding:10,}}>
                 <Text style={{color:'#050505'}}>{name}</Text>
-                <Text style={{color:'#050505'}}>price {price} dzd</Text>
+                <Text style={{color:'#050505', fontWeight:'bold'}}>price {price} dzd</Text>
             </View>
 
         </TouchableOpacity>
