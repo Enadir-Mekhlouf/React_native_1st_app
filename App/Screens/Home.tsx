@@ -1,26 +1,9 @@
 import React, {useEffect} from 'react';
-import {
-  Alert,
-  Button,
-  Image,
-  Modal,
-  ScrollView,
-  Text,
-  TouchableHighlight,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView, StyleSheet, TextInput} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import PicturesItems from '../../App/components/PicturesItems';
-import {useRoute} from '@react-navigation/native';
-import {launchImageLibrary} from 'react-native-image-picker';
-import store from '../../redux/store';
-import {Provider, useDispatch, useSelector} from 'react-redux';
-import {additem, removeitem, updateitem} from '../../redux/ItemSlice';
+import {useSelector} from 'react-redux';
 import ProductModal from './ProductModal';
 
 const Home = ({navigation}: any) => {
@@ -34,7 +17,7 @@ const Home = ({navigation}: any) => {
     shomedata();
   }, []);
 
-  const products = useSelector(state => state.items.items); // Access the products array from Redux store
+  const products = useSelector(state => state.items.items);
 
   return (
     <SafeAreaView style={{flex: 1, padding: 1, backgroundColor: 'white'}}>

@@ -15,7 +15,6 @@ const CustomButton = ({title, onPress, theme}) => {
     },
   };
 
-  // Determine the selected theme, default to primary if not provided
   const selectedTheme = themes[theme] || themes.primary;
 
   return (

@@ -9,16 +9,16 @@ const itemSlice = createSlice({
   initialState,
   reducers: {
     additem: (state, action) => {
-      state.items.push(action.payload); // Add new item
+      state.items.push(action.payload);
     },
     removeitem: (state, action) => {
-      state.items = state.items.filter(item => item.id !== action.payload); // Remove item by ID
+      state.items = state.items.filter(item => item.id !== action.payload);
     },
     updateitem: (state, action) => {
       const {id, updates} = action.payload;
       const index = state.items.findIndex(item => item.id === id);
       if (index !== -1) {
-        state.items[index] = {...state.items[index], ...updates}; // Update item by merging changes
+        state.items[index] = {...state.items[index], ...updates};
       }
     },
   },

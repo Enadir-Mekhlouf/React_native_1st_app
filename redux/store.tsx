@@ -1,4 +1,3 @@
-// /redux/store.js
 import {configureStore} from '@reduxjs/toolkit';
 import itemsReducer from './ItemSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';

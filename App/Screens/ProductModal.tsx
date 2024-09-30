@@ -1,23 +1,21 @@
 import React, {useEffect} from 'react';
 import {
   Alert,
-  Button,
   Image,
   Modal,
   ScrollView,
   Text,
-  TouchableHighlight,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {SafeAreaView, StyleSheet, TextInput} from 'react-native';
+import {SafeAreaView, StyleSheet} from 'react-native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {launchImageLibrary} from 'react-native-image-picker';
-import store from '../../redux/store';
-import {Provider, useDispatch, useSelector} from 'react-redux';
-import {additem, removeitem, updateitem} from '../../redux/ItemSlice';
+import {useDispatch} from 'react-redux';
+import {additem, updateitem} from '../../redux/ItemSlice';
 import CustomTextInput from '../components/textInput';
 import CustomButton from '../components/Button';
+
 const ProductModal = ({visible, onClose, animationType, mode, item}: any) => {
   const [text, setText] = React.useState(item ? item.name : '');
   const [description, setDescription] = React.useState(
@@ -30,6 +28,10 @@ const ProductModal = ({visible, onClose, animationType, mode, item}: any) => {
   const IseditMode = mode === 'edit';
   const dispatch = useDispatch();
   const handleSave = () => {
+    if (!text || !description || !price || !CodeBar || !imageUri) {
+      Alert.alert('Error', 'Please fill in all fields and select an image.');
+      return;
+    }
     const newProduct = {
       name: text,
       price,
@@ -40,9 +42,13 @@ const ProductModal = ({visible, onClose, animationType, mode, item}: any) => {
 
     if (mode === 'edit') {
       dispatch(updateitem({id: item.id, updates: newProduct}));
+      Alert.alert('Product Edited!');
+      onClose();
       // onSave(newProduct);
     } else {
       dispatch(additem({...newProduct, id: Date.now().toString()}));
+      Alert.alert('Product saved!');
+      onClose();
     }
     setText('');
     setDescription('');
@@ -80,114 +86,116 @@ const ProductModal = ({visible, onClose, animationType, mode, item}: any) => {
       animationType={animationType}
       visible={visible}
       onRequestClose={onClose}>
-      <SafeAreaView
-        style={{
-          flex: 1,
-          justifyContent: 'space-between',
-          backgroundColor: '#ffffff',
-          padding: 20,
-        }}>
-        <View
+      <ScrollView>
+        <SafeAreaView
           style={{
             flex: 1,
-            alignItems: 'center',
-            justifyContent: 'space-around',
+            justifyContent: 'space-between',
+            backgroundColor: '#ffffff',
+            padding: 20,
           }}>
-          <View style={{alignItems: 'center'}}>
-            <View style={{alignSelf: 'flex-start', paddingBottom: '20%'}}>
-              <Text style={{fontSize: 30, color: '#050505'}}>
-                {IseditMode ? 'Product Label' : 'Create Product'}
-              </Text>
-            </View>
-            <View>
-              <Text style={{color: '#050505'}}>Label</Text>
-
-              <CustomTextInput
-                value={text}
-                onChangeText={setText}
-                placeholder={'Label'}
-                secureTextEntry={false}
-              />
-            </View>
-            <View>
-              <Text style={{color: '#050505'}}>Description</Text>
-
-              <CustomTextInput
-                value={description}
-                onChangeText={setDescription}
-                placeholder={'Descriptions'}
-                secureTextEntry={false}
-              />
-            </View>
-            <View>
-              <Text style={{color: '#050505'}}>Price</Text>
-
-              <CustomTextInput
-                value={price}
-                onChangeText={setPrice}
-                placeholder={'Price'}
-                secureTextEntry={false}
-              />
-            </View>
-            <View>
-              <Text style={{color: '#050505'}}>Code Bar</Text>
-
-              <CustomTextInput
-                value={CodeBar}
-                onChangeText={setCodeBar}
-                placeholder={'Code Bar'}
-                secureTextEntry={false}
-              />
-            </View>
-          </View>
-
-          {/* this view is the view where i add image and "save" it */}
-          <View style={{width: '100%', alignItems: 'center'}}>
-            <TouchableOpacity style={{width: '100%'}} onPress={openGallery}>
-              <View
-                style={{
-                  backgroundColor: '#eeeeee',
-                  alignItems: 'center',
-                  width: '100%',
-                  borderRadius: 20,
-                  borderStyle: 'dashed',
-                  borderColor: 'gray',
-                  borderWidth: 1,
-                  marginBottom: 20,
-                  padding: 20,
-                }}>
-                {/* <EvilIcons name='image' color={'black'} size={100}/>
-              <Text> Add An Image</Text> */}
-
-                {imageUri ? (
-                  <Image
-                    source={{uri: imageUri}}
-                    style={{width: '100%', height: 200, borderRadius: 10}}
-                  />
-                ) : (
-                  <>
-                    <EvilIcons name="image" color={'black'} size={100} />
-                    <Text>Add An Image</Text>
-                  </>
-                )}
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'space-around',
+            }}>
+            <View style={{alignItems: 'center'}}>
+              <View style={{alignSelf: 'flex-start', paddingBottom: '20%'}}>
+                <Text style={{fontSize: 30, color: '#050505'}}>
+                  {IseditMode ? 'Product Label' : 'Create Product'}
+                </Text>
               </View>
-            </TouchableOpacity>
-            <View style={styles.centeredView}>
-              <View style={{padding: 5, width: 300}}>
-                <CustomButton
-                  title={mode === 'edit' ? 'Save Changes' : 'Create Product'}
-                  onPress={() => {
-                    Alert.alert('Product saved!');
-                    handleSave();
-                    onClose();
+              <View>
+                <Text style={{color: '#050505'}}>Label</Text>
+
+                <CustomTextInput
+                  value={text}
+                  onChangeText={setText}
+                  placeholder={'Label'}
+                  secureTextEntry={false}
+                />
+              </View>
+              <View>
+                <Text style={{color: '#050505'}}>Description</Text>
+
+                <CustomTextInput
+                  value={description}
+                  onChangeText={setDescription}
+                  placeholder={'Descriptions'}
+                  secureTextEntry={false}
+                />
+              </View>
+              <View>
+                <Text style={{color: '#050505'}}>Price</Text>
+                <CustomTextInput
+                  value={price}
+                  onChangeText={input => {
+                    const validInput = input.replace(/[^0-9.]/g, '');
+                    setPrice(validInput);
                   }}
-                  theme={'primary'}
+                  placeholder={'Price'}
+                  secureTextEntry={false}
+                />
+              </View>
+              <View>
+                <Text style={{color: '#050505'}}>Code Bar</Text>
+
+                <CustomTextInput
+                  value={CodeBar}
+                  onChangeText={setCodeBar}
+                  placeholder={'Code Bar'}
+                  secureTextEntry={false}
                 />
               </View>
             </View>
+
+            {/* this view is the view where i add image and "save" it */}
+            <View style={{width: '100%', alignItems: 'center'}}>
+              <TouchableOpacity style={{width: '100%'}} onPress={openGallery}>
+                <View
+                  style={{
+                    backgroundColor: '#eeeeee',
+                    alignItems: 'center',
+                    width: '100%',
+                    borderRadius: 20,
+                    borderStyle: 'dashed',
+                    borderColor: 'gray',
+                    borderWidth: 1,
+                    marginBottom: 20,
+                    padding: 20,
+                  }}>
+                  {/* <EvilIcons name='image' color={'black'} size={100}/>
+              <Text> Add An Image</Text> */}
+
+                  {imageUri ? (
+                    <Image
+                      source={{uri: imageUri}}
+                      style={{width: '100%', height: 200, borderRadius: 10}}
+                    />
+                  ) : (
+                    <>
+                      <EvilIcons name="image" color={'black'} size={100} />
+                      <Text>Add An Image</Text>
+                    </>
+                  )}
+                </View>
+              </TouchableOpacity>
+              <View style={styles.centeredView}>
+                <View style={{padding: 5, width: 300}}>
+                  <CustomButton
+                    title={mode === 'edit' ? 'Save Changes' : 'Create Product'}
+                    onPress={() => {
+                      handleSave();
+                    }}
+                    theme={'primary'}
+                  />
+                </View>
+              </View>
+            </View>
           </View>
-        </View>
-      </SafeAreaView>
+        </SafeAreaView>
+      </ScrollView>
     </Modal>
   );
 };

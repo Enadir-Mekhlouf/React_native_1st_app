@@ -1,26 +1,8 @@
-import React, {useEffect} from 'react';
-import {
-  Alert,
-  Button,
-  Image,
-  Modal,
-  ScrollView,
-  Text,
-  TouchableHighlight,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React from 'react';
+import {Image, Text, View} from 'react-native';
 import {SafeAreaView, StyleSheet, TextInput} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import PicturesItems from '../../App/components/PicturesItems';
-import {useRoute} from '@react-navigation/native';
-import {launchImageLibrary} from 'react-native-image-picker';
-import store from '../../redux/store';
-import {Provider, useDispatch, useSelector} from 'react-redux';
-import {additem, removeitem, updateitem} from '../../redux/ItemSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {removeitem} from '../../redux/ItemSlice';
 import ProductModal from './ProductModal';
 import CustomButton from '../components/Button';
 
@@ -31,9 +13,6 @@ const ProductDetail = ({route, navigation}: any) => {
     (state: any) => state.items.items.filter(i => i.id == id)[0],
   );
 
-  // const {name, imageUri, CodeBar, price, description} = useSelector(
-  //   (state: any) => state.items.items.filter(i => i.id == id)[0],
-  // );
   const [Modalvisible, SetModalvisible] = React.useState(false);
   const dispatch = useDispatch();
 

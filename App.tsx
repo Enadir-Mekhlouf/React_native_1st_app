@@ -1,10 +1,9 @@
-// /App.js
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Provider} from 'react-redux'; // Removed unused hooks
+import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
-import {store, persistor} from './redux/store'; // Correctly import both store and persistor
+import {store, persistor} from './redux/store';
 
 import SignIN from './App/Screens/SignIn';
 import SignUP from './App/Screens/SignUp';
