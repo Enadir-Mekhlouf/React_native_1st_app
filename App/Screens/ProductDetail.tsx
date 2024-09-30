@@ -25,19 +25,17 @@ import ProductModal from './ProductModal';
 import CustomButton from '../components/Button';
 
 const ProductDetail = ({route, navigation}: any) => {
-  const {id, name, imageUri, CodeBar, price, description} = route.params;
+  const {id} = route.params;
 
   const product = useSelector(
     (state: any) => state.items.items.filter(i => i.id == id)[0],
   );
-  console.log(product);
 
   // const {name, imageUri, CodeBar, price, description} = useSelector(
   //   (state: any) => state.items.items.filter(i => i.id == id)[0],
   // );
   const [Modalvisible, SetModalvisible] = React.useState(false);
   const dispatch = useDispatch();
-  console.log(typeof imageUri, imageUri);
 
   const toggleModalVisible = () => {
     SetModalvisible(!Modalvisible);
